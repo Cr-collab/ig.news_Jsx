@@ -8,6 +8,7 @@ import styles from './post.module.scss';
 
 
 export default  function Post({ post }){
+
   return (
     <>
        <Head> 
@@ -31,8 +32,15 @@ export const getServerSideProps = async ({req , params }) => {
     const session = await getSession({req});
 
     console.log(session)
-    
     const  { slug } =  params;
+
+   if(!session.activeSubscription) {
+       return {
+         redirect: {
+            destination: '/',
+            permanent: false,
+         }
+       }   }
 
     const prismic = getPrismicClient(req)
 
