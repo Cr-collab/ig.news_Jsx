@@ -4,11 +4,16 @@ import styles from './styles.module.scss';
 import Prismic from '@prismicio/client'
 import {RichText} from 'prismic-dom'
 import Link from 'next/link'
+import {signIn, useSession, signOut} from  'next-auth/client'
+
 
 
 
 
 export default function Posts({ posts }) {
+  
+  const [session]= useSession();
+
   return(
      <>
         <Head>
@@ -22,7 +27,7 @@ export default function Posts({ posts }) {
               {
                 posts.map((post)=>{
                   return(
-                    <Link href={`/posts/${post.slug}`} >
+                    <Link href={`/posts/${ session?.activeSubscription ? post.slug : `preview/${post.slug}`}`} >
                       <a >
                       <time>
                         {post.updatedAt}
